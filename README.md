@@ -1,32 +1,56 @@
-# Web Scraping Monitor
+# Web Scraping Monitor (Production-Ready)
 
-A **price/availability monitoring system** using web scraping, historical storage, and alerts.
+Sistema de **aquisição e monitoramento de dados via web scraping**, com foco em **resiliência operacional**, qualidade e rastreabilidade do dado.
 
-## Goals
-- Collect product data with reliable scraping
-- Store history for trend analysis
-- Trigger alerts (price drop / back in stock)
-- Keep scraping resilient (retry, rate limit, parsing)
+> Inspirado em desafios reais de Data Acquisition: fontes instáveis, mudanças de HTML, indisponibilidade, bloqueios e inconsistências.
 
-## Tech Stack
-- Python
-- HTTPX / BeautifulSoup (or Scrapy)
-- PostgreSQL / SQLite
-- Docker
-- Notifications: Telegram (roadmap)
+---
 
-## Architecture
-**Scraper → Raw Storage → Normalization → History DB → Alerts**
+## ✅ O que este projeto demonstra
+- Scraping em **Python** com fundamentos sólidos de **HTTP**
+- **Resiliência**: timeout, retry com backoff, rate limit, circuit breaker (roadmap)
+- **Qualidade de dados**: validação de schema, normalização e deduplicação
+- **Observabilidade**: logs estruturados e métricas básicas (roadmap)
+- **Operação**: execução agendada e alertas (Telegram)
 
-## Roadmap
-- [ ] Scrape 1 website + 5 products
-- [ ] Store price history
-- [ ] Alert rules (target price / % drop)
-- [ ] Telegram bot notifications
-- [ ] Scheduler (cron / Airflow)
+---
 
-## Status
-🚧 In development
+## 🎯 Objetivos
+- Coletar dados (preço/disponibilidade) de forma confiável
+- Manter **histórico** para análise de tendências
+- Disparar alertas (queda de preço / retorno ao estoque)
+- Operar bem em produção: **falha controlada + rápida recuperação**
 
-## Author
-Jackson Oliveira
+---
+
+## 🧰 Tech Stack
+- Python 3.11+
+- HTTPX (requests async-friendly) + BeautifulSoup / Selectolax (parsing)
+- PostgreSQL (prod) / SQLite (dev)
+- Docker / Docker Compose
+- Telegram Bot (alerts)
+- (Roadmap) Airflow / Cron + métricas
+
+---
+
+## 🧱 Arquitetura (Bronze → Silver)
+**Scraper (HTTP) → Bronze (raw html/json) → Parser/Normalizer (Silver) → DB histórico → Alert Engine → Telegram**
+
+### Camadas
+- **Bronze**: resposta bruta (html + headers + status_code) com timestamp
+- **Silver**: dados normalizados (preço, moeda, disponibilidade, produto_id)
+- **Gold (roadmap)**: KPIs (menor preço 7d/30d, variação %, tendência)
+
+---
+
+## 🧪 Qualidade & Consistência
+- Validação de schema (campos obrigatórios)
+- Normalização de preço/moeda
+- Deduplicação por `hash(source + canonical_url + title)`
+- Detecção de mudança de HTML (roadmap: "parser health checks")
+
+---
+
+## ▶️ Como executar (Docker)
+```bash
+docker compose up --build
