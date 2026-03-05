@@ -54,3 +54,27 @@ Sistema de **aquisição e monitoramento de dados via web scraping**, com foco e
 ## ▶️ Como executar (Docker)
 ```bash
 docker compose up --build
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python -m app.cli run --site example --limit 5
+
+🗺️ Roadmap
+
+ ° 1 site + 5 produtos (MVP)
+
+ ° Persistência histórica (PostgreSQL)
+
+ ° Alertas Telegram (preço alvo / % queda / estoque)
+
+ ° Scheduler (cron)
+
+ ° Observabilidade: métricas + alertas de falha
+
+ ° Anti-bloqueio (proxy rotation, fingerprinting) com uso responsável
+
+ 📌 Status
+
+🚧 Em desenvolvimento
+
+Author
